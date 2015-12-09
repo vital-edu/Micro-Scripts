@@ -7,6 +7,8 @@
 #define LED1 BIT0
 #define LED2 BIT6
 #define START_MEDICINE 20
+#define START_DOSAGE BIT4
+#define END_DOSAGE BIT5
 
 volatile unsigned char count = 0, blink;
 volatile unsigned char microsegs;
@@ -55,11 +57,12 @@ int main(void)
         // MCLK e SMCLK @ 1 MHz
         BCSCTL1 = CALBC1_1MHZ;
         DCOCTL = CALDCO_1MHZ;
-       
+
         // Habilitar pinos para entrada e saída UART
         P1SEL2 = P1SEL = RX+TX;
         // Saída digital para pinos dos LEDs
         P1DIR = LED1+LED2;
+        P1DIR |= (BIT4 + BIT5);
         // Habilitar resistor de pull-up no pino do botão
         // e habilitar interrupção por borda de descida
         P1IE = P1IES = P1OUT = P1REN = BTN;
@@ -106,22 +109,24 @@ int main(void)
 // se aperta o botão da Launchpad
 interrupt(PORT1_VECTOR) Send_Data(void)
 {
-        // Acender LED1, indicando começo do uso da UART
-        P1OUT |= LED1;
-        while((IFG2 & UCA0TXIFG) == 0);
-        P1OUT &= ~(LED1);
-        // Aguardar UART estar pronta para poder enviar um byte
-        // Incrementar variavel count e envia-la via UART
-        UCA0TXBUF = 49;
-        if(medicine_count < 1) {
-          // ACABOU O ESTOQUE
-        } else {
-          medicine_count -= 1;
-        }
-        //display(count);
-        // Atraso(5000);
-        // Desabilitar interrupções da porta P1
-        P1IE = P1IFG = 0;
+  // Acender LED1, indicando começo do uso da UART
+  P1OUT |= LED1;
+  while((IFG2 & UCA0TXIFG) == 0);
+  P1OUT &= ~(BIT5);
+  P1OUT &= ~(BIT4);
+  P1OUT &= ~(LED1);
+  // Aguardar UART estar pronta para poder enviar um byte
+  // Incrementar variavel count e envia-la via UART
+  UCA0TXBUF = 49;
+  if(medicine_count < 1) {
+    // ACABOU O ESTOQUE
+  } else {
+    medicine_count -= 1;
+  }
+  //display(count);
+  // Atraso(5000);
+  // Desabilitar interrupções da porta P1
+  P1IE = P1IFG = 0;
 }
  
 // Interrupção por recebimento de byte via UART
@@ -137,7 +142,10 @@ interrupt(USCIAB0RX_VECTOR) Receive_Data(void)
           medicine_count = START_MEDICINE;
         } else if(blink == 8) {
           // INICIO DO HORARIO QUE PODE TOMAR O REMEDIO
+          P1OUT |= START_DOSAGE;
         } else if(blink == 7) {
+          P1OUT &= ~(START_DOSAGE);
+          P1OUT |= END_DOSAGE;
           // FIM DO HORARIO QUE PODE TOMAR O REMEDIO
         }
 
