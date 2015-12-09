@@ -1,0 +1,27 @@
+<script type="text/javascript">
+  $('#shot_date_select').timepicker({ 'scrollDefault': 'now' });
+</script>
+
+<%= form_for(@shot) do |f| %>
+  <% if @shot.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@shot.errors.count, "error") %> prohibited this shot from being saved:</h2>
+
+      <ul>
+      <% @shot.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :shot_date, 'Horário da dose'%>
+    <br>
+    <%= f.text_field :shot_date, id: 'shot_date_select'  %>
+    <%= f.hidden_field :medicine_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit class: 'btn right' %>
+  </div>  
+<% end %>

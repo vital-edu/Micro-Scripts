@@ -1,0 +1,51 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.collapsible').collapsible({
+      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+  });
+</script>
+
+<p id="notice"><%= notice %></p>
+<input type='hidden' id="medicine_id" value="<%=@medicine.id%>">
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Descrição</th>
+      <th>Quantidade</th>
+      <th>Dosagem</th>
+      <th>Dosagem máxima</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= @medicine.name %></td>
+      <td><%= @medicine.description %></td>
+      <td id="amount"><%= @medicine.amount %></td>
+      <td><%= @medicine.shot %></td>
+      <td><%= @medicine.max_shot %></td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="responsive-table">
+  <thead>
+    <tr>
+      <th>
+        Horários da dose
+        <%= link_to 'Cadastrar novo horário', new_shot_path(medicine_id: @medicine.id), class: 'btn right' %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @medicine.shots.each do |s| %>
+      <tr>
+        <td><%= s.shot_date.strftime('%H:%M:%S') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Voltar', medicines_path, class: 'btn left red' %>
+<%= link_to 'Editar', edit_medicine_path(@medicine), class: 'btn right' %>

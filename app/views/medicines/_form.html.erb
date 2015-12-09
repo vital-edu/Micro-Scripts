@@ -1,0 +1,37 @@
+<%= form_for(@medicine) do |f| %>
+  <% if @medicine.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@medicine.errors.count, "error") %> prohibited this medicine from being saved:</h2>
+
+      <ul>
+      <% @medicine.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, 'Nome' %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description, 'Descrição' %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="field">
+    <%= f.label :amount, 'Quantidade' %><br>
+    <%= f.number_field :amount %>
+  </div>
+  <div class="field">
+    <%= f.label :shot, 'Dosagem' %><br>
+    <%= f.number_field :shot %>
+  </div>
+  <div class="field">
+    <%= f.label :max_shot, 'Dosagem máxima' %><br>
+    <%= f.number_field :max_shot %>
+  </div>
+  <div class="actions">
+    <%= f.submit 'Salvar', class: 'btn right' %>
+  </div>
+<% end %>

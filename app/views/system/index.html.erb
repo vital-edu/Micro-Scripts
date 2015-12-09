@@ -1,0 +1,26 @@
+<table class="highlight">
+<thead>
+  <tr>
+    <th>Nome</th>
+    <th>Descrição</th>
+    <th>Quantidade</th>
+    <th>Dose</th>
+    <th>Dosagem máxima</th>
+    <th>Dosagem máxima</th>
+    <th>Próxima dose</th>
+  </tr>
+</thead>
+<tbody>
+  <% @medicines.each do |m| %>
+    <tr>
+      <td><%= link_to m.name, m %></td>
+      <td><%= m.description %></td>
+      <td><%= m.amount %></td>
+      <td><%= m.shot %></td>
+      <td><%= m.max_shot %></td>
+      <td><%= m.name %></td>
+      <th><%= m.next_shot %></th>
+    </tr>
+  <% end %>
+</tbody>
+</table> 
