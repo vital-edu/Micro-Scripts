@@ -120,6 +120,7 @@ interrupt(PORT1_VECTOR) Send_Data(void)
   UCA0TXBUF = 49;
   if(medicine_count < 1) {
     // ACABOU O ESTOQUE
+    display(6);
   } else {
     medicine_count -= 1;
   }
@@ -132,30 +133,32 @@ interrupt(PORT1_VECTOR) Send_Data(void)
 // Interrupção por recebimento de byte via UART
 interrupt(USCIAB0RX_VECTOR) Receive_Data(void)
 {
-        // Guardar valor recebido via UART na variavel blink
-        blink = UCA0RXBUF;
-        blink -= 48;
+  // Guardar valor recebido via UART na variavel blink
+  blink = UCA0RXBUF;
+  blink -= 48;
 
-        //BLINK = AÇÃO A SER FEITA
-        if(blink == 9) {
-          // RESETA O TOTAL DE REMÉDIOS
-          medicine_count = START_MEDICINE;
-        } else if(blink == 8) {
-          // INICIO DO HORARIO QUE PODE TOMAR O REMEDIO
-          P1OUT |= START_DOSAGE;
-        } else if(blink == 7) {
-          P1OUT &= ~(START_DOSAGE);
-          // FIM DO HORARIO QUE PODE TOMAR O REMEDIO
-        } else if(medicine_count > 0) {
-          // tem remedios no estoque
-          P1OUT |= END_DOSAGE;
-        }
+  //BLINK = AÇÃO A SER FEITA
+  if(blink == 9) {
+    // RESETA O TOTAL DE REMÉDIOS
+    medicine_count = START_MEDICINE;
+  } else if(blink == 8) {
+    // INICIO DO HORARIO QUE PODE TOMAR O REMEDIO
+    P1OUT |= START_DOSAGE;
+  } else if(blink == 7) {
+    P1OUT &= ~(START_DOSAGE);
+    // FIM DO HORARIO QUE PODE TOMAR O REMEDIO
+  } else if(medicine_count > 0) {
+    // tem remedios no estoque
+    P1OUT |= END_DOSAGE;
+  } else if(medicine_count < 1) {
+    blink = 6;
+  }
 
-        display(blink);
-        // Retornar ao main() sem modo de baixo consumo
-        LPM0_EXIT;
-        // Apagar LED1, indicando fim do uso da UART
-        P1OUT &= ~LED1;
+  display(blink);
+  // Retornar ao main() sem modo de baixo consumo
+  LPM0_EXIT;
+  // Apagar LED1, indicando fim do uso da UART
+  P1OUT &= ~LED1;
 }
  
 // Função que fornece um atraso de x micro-segundos
