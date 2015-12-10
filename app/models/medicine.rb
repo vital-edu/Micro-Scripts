@@ -1,6 +1,13 @@
 class Medicine < ActiveRecord::Base
 	has_many :shots
 
+	# Validations
+	validates :name, presence: true, uniqueness: true, length: { in: 4..20 }
+	validates :description, presence: true, length: { in: 4..200 }
+	validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
+	validates :shot, presence: true, numericality: { greater_than_or_equal_to: 0 }
+	validates :max_shot, presence: true, numericality: { greater_than_or_equal_to: 0 }
+
 def next_shot
     now = Time.now.hour
 
@@ -14,7 +21,7 @@ def next_shot
       puts "NOW: #{now}"
       puts "SHOT_DATE: #{p.shot_date.hour}"
       if p.shot_date.hour > now
-        return "#{p.shot_date.hour - now}h" 
+        return "#{p.shot_date.hour - now}h"
       end
     end
 
