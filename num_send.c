@@ -145,8 +145,10 @@ interrupt(USCIAB0RX_VECTOR) Receive_Data(void)
           P1OUT |= START_DOSAGE;
         } else if(blink == 7) {
           P1OUT &= ~(START_DOSAGE);
-          P1OUT |= END_DOSAGE;
           // FIM DO HORARIO QUE PODE TOMAR O REMEDIO
+        } else if(medicine_count > 0) {
+          // tem remedios no estoque
+          P1OUT |= END_DOSAGE;
         }
 
         display(blink);
