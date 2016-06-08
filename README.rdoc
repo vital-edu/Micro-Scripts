@@ -1,28 +1,24 @@
-== README
+= Medicine Stock Web Management
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+== Description
 
-Things you may want to cover:
+Accademic programm that help old people to manage your medicines using a MSP-430.
 
-* Ruby version
+== Objective
 
-* System dependencies
+Sometimes people that depends of medicines can not remember when  has to take a dose, or what is the stock status.
+With this project we pretend to automate these two things.
 
-* Configuration
+This software alerts when it is necessary take a medicine dose, and when the user presses the button of the MSP-430, automatically the stock is updated in the Medicine Web Management. When the stock is low, the drugstore can use this information to delivery more medicine.
 
-* Database creation
+With that, we have the goal of automate the process of medicine stock to the end user.
 
-* Database initialization
+== Dependencies
 
-* How to run the test suite
+- MSP-430
+- Server running the RoR
 
-* Services (job queues, cache servers, search engines, etc.)
+=== Ruby on Rails
 
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+- Ruby v2.1.9
+- Rails 4.2.0
